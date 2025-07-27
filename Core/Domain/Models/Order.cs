@@ -13,7 +13,7 @@ namespace Domain.Models
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
         // Navigation properties
-        public virtual Customer Customer { get; set; } = null!;
+        public virtual Customer Customer { get; set; }
         public virtual IEnumerable<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public virtual Invoice Invoice { get; set; }
     }
