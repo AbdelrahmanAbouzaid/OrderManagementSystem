@@ -1,5 +1,6 @@
 ﻿
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.DTOs;
@@ -11,6 +12,7 @@ namespace Presentation.Controllers
     public class OrdersController(IServiceManager serviceManager) : ControllerBase
     {
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllOrdersAsync()
         {
             var orders = await serviceManager.OrderService.GetAllOrdersAsync();
@@ -24,6 +26,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut("{orderId:int}/status")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateOrderStatusAsync(int orderId, [FromQuery] string status)
         {
             if (string.IsNullOrWhiteSpace(status))

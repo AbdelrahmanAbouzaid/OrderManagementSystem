@@ -14,7 +14,8 @@ namespace OrderManagementSystem.API
 
             builder.Services.RegisterAllServices(builder.Configuration);
             builder.Services.Configure<MailOptions>(builder.Configuration.GetSection("MailOptions"));
-            
+            builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
+
 
             var app = builder.Build();
 
