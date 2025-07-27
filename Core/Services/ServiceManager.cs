@@ -10,6 +10,6 @@ namespace Services
     {
         public IOrderService OrderService { get; set; } = new OrderService(unitOfWork, mapper, mailService);
         public ICustomerService CustomerService { get; set; } = new CustomerService(unitOfWork, mapper);
-
+        public IProductService ProductService { get; set; } = new ProductService(unitOfWork, mapper);
     }
 }
