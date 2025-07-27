@@ -6,5 +6,6 @@ namespace Services.Abstractions
         IOrderService OrderService { get; }
         ICustomerService CustomerService { get; }
         IProductService ProductService { get; }
+        IInvoiceService InvoiceService { get; }
     }
 }
