@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Shared.DTOs;
@@ -24,6 +25,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut("{productId:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct(int productId, [FromBody] UpdateProductDto productDto)
         {
             var result = await serviceManager.ProductService.UpdateProductAsync(productId, productDto);
@@ -31,6 +33,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto productDto)
         {
             var result = await serviceManager.ProductService.CreateProductAsync(productDto);
