@@ -16,7 +16,10 @@ namespace Services
     {
         public async Task<OrderDto> CreateOrderAsync(CreateOrderDto createOrderDto)
         {
-            //TODO:: Get customer by Id for validation
+            // Get customer by Id for validation
+            var customer = await unitOfWork.GetRepository<Customer>().GetByIdAsync(createOrderDto.CustomerId);
+            if (customer is null)
+                throw new CustomerNotFoundException(createOrderDto.CustomerId);
 
 
             // Validate products and stock
@@ -32,19 +35,21 @@ namespace Services
 
                 decimal itemTotal = product.Price * item.Quantity;
                 decimal discount = CalculateDiscount(itemTotal);
-                var unitPrice = product.Price - discount;
+                
 
                 product.Stock -= item.Quantity;
+
+                unitOfWork.GetRepository<Product>().Update(product);
 
                 orderItems.Add(new OrderItem
                 {
                     ProductId = product.ProductId,
                     Quantity = item.Quantity,
-                    UnitPrice = unitPrice,
+                    UnitPrice = product.Price,
                     Discount = discount
                 });
 
-                totalAmount += unitPrice * item.Quantity;
+                totalAmount += itemTotal - discount;
 
             }
 
@@ -62,10 +67,11 @@ namespace Services
             };
 
             await unitOfWork.GetRepository<Order>().AddAsync(order);
+            await unitOfWork.SaveChangesAsync();
 
             var invoice = new Invoice
             {
-                Order = order,
+                OrderId = order.OrderId,
                 InvoiceDate = DateTime.UtcNow,
                 TotalAmount = totalAmount
             };
