@@ -1,5 +1,4 @@
 ﻿
-
 using Domain.Contracts;
 using Domain.Models;
 using Persistence.Data;
@@ -16,6 +15,7 @@ namespace Persistence
         public UnitOfWork(OrderManagementDbContext context)
         {
             _context = context;
+            _repository =  new ConcurrentDictionary<string, object>();   
         }
         public IGenericRepository<TEntity> GetRepository<TEntity>() 
             where TEntity : BaseEntity

@@ -1,4 +1,7 @@
-﻿using Persistence;
+﻿using OrderManagementSystem.API.Middlewares;
+using Persistence;
+using System.Threading.Tasks;
+using Services;
 
 namespace OrderManagementSystem.API.Extentions
 {
@@ -14,6 +17,7 @@ namespace OrderManagementSystem.API.Extentions
             services.AddSwaggerGen();
 
             services.AddInfrastructureServices(configuration);
+            services.AddApplicationServices(configuration);
 
             return services;
         }   
@@ -23,6 +27,8 @@ namespace OrderManagementSystem.API.Extentions
         public static WebApplication UseAllMiddlewares(this WebApplication app)
         {
             // Configure the HTTP request pipeline.
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
